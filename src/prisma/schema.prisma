@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum role {
+  administrator
+  vendor
+}
+
+enum productStatus {
+  approved
+  rejected
+  waiting
+}
+
+enum requestStatus {
+  waiting
+  approved
+  rejected
+}
+
+enum notificationStatus {
+  read
+  unread
+}
+
+enum orderStatus {
+  refund
+  approved
+  declined
+}
+
+model User {
+  userID       String         @id @default(cuid())
+  email        String         @unique
+  password     String
+  role         role
+  createdAt    DateTime
+  Products     product[]
+  Order        order[]
+  Profile      profile[]
+  Request      request[]
+  Logs         logs[]
+  locked       Boolean        @default(false)
+  Notificaiton notification[]
+  Company      company[]
+}
+
+model logs {
+  logsID    String   @id @default(cuid())
+  log       String
+  createdAt DateTime
+  User      User?    @relation(fields: [userID], references: [userID], onDelete: Cascade)
+  userID    String?
+}
+
+model company {
+  companyID      String    @id @default(cuid())
+  companyName    String
+  User           User      @relation(fields: [userID], references: [userID], onDelete: Cascade)
+  Product        product[]
+  companyAddress address[]
+  order          order[]
+  userID         String
+}
+
+model address {
+  addressID String   @id @default(cuid())
+  city      String
+  street    String
+  province  String
+  zipcode   String
+  Company   company? @relation(fields: [companyID], references: [companyID], onDelete: Cascade)
+  companyID String?
+}
+
+model profile {
+  profileID String   @id @default(cuid())
+  firstname String
+  lastname  String
+  birthday  DateTime
+  phone     String
+  User      User?    @relation(fields: [userID], references: [userID], onDelete: Cascade)
+  userID    String?
+}
+
+model notification {
+  notificationID     String             @id @default(cuid())
+  title              String
+  notificationStatus notificationStatus @default(unread)
+  createdAt          DateTime
+  Product            product[]
+  Request            request[]
+  User               User?              @relation(fields: [userID], references: [userID], onDelete: Cascade)
+  userID             String?
+}
+
+model product {
+  productID      String        @id @default(cuid())
+  sku            String        @unique
+  title          String
+  price          Int
+  stock          Int
+  User           User          @relation(fields: [userID], references: [userID], onDelete: Cascade)
+  userID         String
+  status         productStatus @default(waiting)
+  Company        company[]
+  createdAt      DateTime      @db.Timestamp()
+  notification   notification? @relation(fields: [notificationID], references: [notificationID])
+  notificationID String?
+  request        request[]
+  order          order[]
+}
+
+model order {
+  orderID   String      @id @default(cuid())
+  quantity  Int
+  total     Float
+  Product   product[]
+  Company   company     @relation(fields: [companyID], references: [companyID], onDelete: Cascade)
+  companyID String
+  payment   String
+  status    orderStatus
+  discount  Int         @default(0)
+  createdAt DateTime    @default(now()) @db.Timestamp()
+  User      User        @relation(fields: [userID], references: [userID], onDelete: Cascade)
+  userID    String
+}
+
+model request {
+  requestID      String        @id @default(cuid())
+  message        String
+  quantity       Int?
+  status         requestStatus @default(waiting)
+  createdAt      DateTime      @db.Timestamp()
+  Product        product[]
+  User           User          @relation(fields: [userID], references: [userID], onDelete: Cascade)
+  userID         String
+  notification   notification? @relation(fields: [notificationID], references: [notificationID], onDelete: Cascade)
+  notificationID String?
+}
+
+model otp {
+  otID      String   @id @default(cuid())
+  otp       String   @unique
+  createdAt DateTime @db.Timestamp()
+  expiredAt DateTime @db.Timestamp()
+}
