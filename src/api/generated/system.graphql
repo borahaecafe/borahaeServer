@@ -20,7 +20,6 @@ scalar EmailAddress @specifiedBy(url: "https://www.w3.org/Protocols/rfc822/")
 type Mutation {
   createCompanyDetails(address: addressInput, companyID: ID!): company
   createLogoutLog(userID: ID!): logs
-  createMeAnEmail(additionInfo: String!, email: EmailAddress!, firstname: String!, lastname: String!, phone: String!): contactus
   createOTP(email: EmailAddress!): otp
   createOrder(orderses: [orderInput]): [order]
   createProduct(proudct: productInput!, userID: ID!): products
@@ -84,6 +83,7 @@ type Query {
   getSearchProduct(sku: String!, userID: ID!): [products]
   getSearchSKU(sku: String!, userID: ID!): [products]
   getTotalRevenue(userID: ID!): [order]
+  getTotalVendorTransaction(end: String!, start: String!, userID: ID!): [order]
   getUnreadNotification(userID: ID!): [notification]
   getUserID(userID: ID!): [user]
   getUserLog(first: Int!, offset: Int!, userID: ID!): [logs]
@@ -122,14 +122,6 @@ type company {
   orders: [order]
   product: [products]
   user: [user]
-}
-
-type contactus {
-  additionInfo: String
-  email: EmailAddress
-  firstname: String
-  lastname: String
-  phone: PhoneNumber
 }
 
 type logs {

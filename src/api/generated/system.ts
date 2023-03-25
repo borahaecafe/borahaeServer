@@ -112,13 +112,6 @@ export interface NexusGenObjects {
     companyID?: string | null; // ID
     companyName?: string | null; // String
   }
-  contactus: { // root type
-    additionInfo?: string | null; // String
-    email?: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    firstname?: string | null; // String
-    lastname?: string | null; // String
-    phone?: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
-  }
   logs: { // root type
     createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
     log?: string | null; // String
@@ -214,7 +207,6 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createCompanyDetails: NexusGenRootTypes['company'] | null; // company
     createLogoutLog: NexusGenRootTypes['logs'] | null; // logs
-    createMeAnEmail: NexusGenRootTypes['contactus'] | null; // contactus
     createOTP: NexusGenRootTypes['otp'] | null; // otp
     createOrder: Array<NexusGenRootTypes['order'] | null> | null; // [order]
     createProduct: NexusGenRootTypes['products'] | null; // products
@@ -272,6 +264,7 @@ export interface NexusGenFieldTypes {
     getSearchProduct: Array<NexusGenRootTypes['products'] | null> | null; // [products]
     getSearchSKU: Array<NexusGenRootTypes['products'] | null> | null; // [products]
     getTotalRevenue: Array<NexusGenRootTypes['order'] | null> | null; // [order]
+    getTotalVendorTransaction: Array<NexusGenRootTypes['order'] | null> | null; // [order]
     getUnreadNotification: Array<NexusGenRootTypes['notification'] | null> | null; // [notification]
     getUserID: Array<NexusGenRootTypes['user'] | null> | null; // [user]
     getUserLog: Array<NexusGenRootTypes['logs'] | null> | null; // [logs]
@@ -300,13 +293,6 @@ export interface NexusGenFieldTypes {
     orders: Array<NexusGenRootTypes['order'] | null> | null; // [order]
     product: Array<NexusGenRootTypes['products'] | null> | null; // [products]
     user: Array<NexusGenRootTypes['user'] | null> | null; // [user]
-  }
-  contactus: { // field return type
-    additionInfo: string | null; // String
-    email: NexusGenScalars['EmailAddress'] | null; // EmailAddress
-    firstname: string | null; // String
-    lastname: string | null; // String
-    phone: NexusGenScalars['PhoneNumber'] | null; // PhoneNumber
   }
   logs: { // field return type
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -409,7 +395,6 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createCompanyDetails: 'company'
     createLogoutLog: 'logs'
-    createMeAnEmail: 'contactus'
     createOTP: 'otp'
     createOrder: 'order'
     createProduct: 'products'
@@ -467,6 +452,7 @@ export interface NexusGenFieldTypeNames {
     getSearchProduct: 'products'
     getSearchSKU: 'products'
     getTotalRevenue: 'order'
+    getTotalVendorTransaction: 'order'
     getUnreadNotification: 'notification'
     getUserID: 'user'
     getUserLog: 'logs'
@@ -495,13 +481,6 @@ export interface NexusGenFieldTypeNames {
     orders: 'order'
     product: 'products'
     user: 'user'
-  }
-  contactus: { // field return type name
-    additionInfo: 'String'
-    email: 'EmailAddress'
-    firstname: 'String'
-    lastname: 'String'
-    phone: 'PhoneNumber'
   }
   logs: { // field return type name
     createdAt: 'DateTime'
@@ -608,13 +587,6 @@ export interface NexusGenArgTypes {
     }
     createLogoutLog: { // args
       userID: string; // ID!
-    }
-    createMeAnEmail: { // args
-      additionInfo: string; // String!
-      email: NexusGenScalars['EmailAddress']; // EmailAddress!
-      firstname: string; // String!
-      lastname: string; // String!
-      phone: string; // String!
     }
     createOTP: { // args
       email: NexusGenScalars['EmailAddress']; // EmailAddress!
@@ -805,6 +777,11 @@ export interface NexusGenArgTypes {
       userID: string; // ID!
     }
     getTotalRevenue: { // args
+      userID: string; // ID!
+    }
+    getTotalVendorTransaction: { // args
+      end: string; // String!
+      start: string; // String!
       userID: string; // ID!
     }
     getUnreadNotification: { // args
