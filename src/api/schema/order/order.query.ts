@@ -108,7 +108,7 @@ export const orderQuery = extendType({
                 const orders = await prisma.$queryRawUnsafe(`select DATE_TRUNC('month', public.order."createdAt"), sum("total") from public."order"
                 WHERE "userID" = '${userID}' AND "status" = 'approved'
 				AND "createdAt" > '${date.toJSON().slice(0, 7)}-01'
-                GROUP by DATE_TRUNC('month', public.order."createdAt") `)
+                GROUP by DATE_TRUNC('month', public.order."createdAt") `) as any
 
                 return orders.map(({ date_trunc, sum }) => {
                     return { date: date_trunc, total: sum }

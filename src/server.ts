@@ -11,7 +11,7 @@ import { PubSub } from "graphql-subscriptions/dist/pubsub.js"
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs'
 import authorization from 'nexus';
 
-const { fieldAuthorizePlugin, declarativeWrappingPlugin } = authorization;
+const { declarativeWrappingPlugin } = authorization;
 
 import express from 'express'
 import cookieParser from "cookie-parser"
@@ -58,7 +58,7 @@ async function startApolloServer() {
             schema: join(process.cwd(), "/src/api/generated/system.graphql"),
             typegen: join(process.cwd(), "/src/api/generated/system.ts"),
         },
-        plugins: [ fieldAuthorizePlugin(), declarativeWrappingPlugin() ]
+        plugins: [ declarativeWrappingPlugin() ]
     })
 
     const wsServer = new WebSocketServer({
