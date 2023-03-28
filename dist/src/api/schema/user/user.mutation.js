@@ -151,6 +151,7 @@ export const userMutation = extendType({
                         throw new GraphQLError("Invalid password. Please Try again");
                     const token = sign({ userId: user.userID, r: user.role, lock: user.locked }, "compayName", {
                         algorithm: "HS512",
+                        expiresIn: "7d",
                     });
                     await prisma.logs.create({
                         data: {

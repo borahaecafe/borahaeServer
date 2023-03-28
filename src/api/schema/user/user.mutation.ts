@@ -169,6 +169,8 @@ export const userMutation = extendType({
 
                     const token = sign({ userId: user.userID, r: user.role, lock: user.locked }, "compayName", {
                         algorithm: "HS512",
+                        expiresIn: "7d",
+                        
                     })
 
 

@@ -81,6 +81,9 @@ export const orderQuery = extendType({
                             gte: new Date(start),
                             lte: new Date(end)
                         },
+                    },
+                    orderBy: {
+                        createdAt: "desc"
                     }
                 });
                 return orders;
@@ -153,6 +156,24 @@ export const orderQuery = extendType({
                     where: {
                         User: {
                             userID
+                        }
+                    }
+                });
+            }
+        });
+        t.list.field("getTotalVendorTransaction", {
+            type: "order",
+            args: { start: nonNull(stringArg()), end: nonNull(stringArg()), userID: nonNull(idArg()) },
+            resolve: async (_, { start, end, userID }) => {
+                const user = await prisma.user.findUnique({
+                    where: { userID }, include: { Company: true }
+                });
+                return await prisma.order.findMany({
+                    where: {
+                        companyID: user.Company[0].companyID,
+                        createdAt: {
+                            lte: new Date(end),
+                            gte: new Date(start)
                         }
                     }
                 });

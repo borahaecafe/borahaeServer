@@ -248,9 +248,12 @@ export const requestMutation = extendType({
                                 },
                                 data: { status: "approved" }
                             });
+                            const prod = await prisma.product.findUnique({
+                                where: { productID: request.Product[0].productID }
+                            });
                             await prisma.product.update({
                                 data: {
-                                    stock: request.quantity
+                                    stock: prod.stock + request.quantity
                                 },
                                 where: {
                                     productID: request.Product[0].productID
@@ -351,6 +354,9 @@ export const requestMutation = extendType({
                 const users = await prisma.user.findMany({
                     where: {
                         role: "administrator"
+                    },
+                    include: {
+                        Company: true
                     }
                 });
                 const notification = await prisma.notification.create({
@@ -365,10 +371,15 @@ export const requestMutation = extendType({
                         createdAt: new Date(Date.now())
                     }
                 });
+                const product = await prisma.product.findUnique({
+                    where: {
+                        productID
+                    }
+                });
                 const request = await prisma.request.create({
                     data: {
                         status: "waiting",
-                        message: `I want to pull out ${quantity} from this item. `,
+                        message: `I'm request that the product be pulled-out from our inventory ${product.title}-${product.sku} with ${quantity} stock/s`,
                         User: {
                             connect: { userID }
                         },
@@ -386,6 +397,20 @@ export const requestMutation = extendType({
                         createdAt: new Date(Date.now())
                     }
                 });
+                if (quantity === request.quantity) {
+                    return await prisma.company.update({
+                        where: {
+                            companyID: users[0].Company[0].companyID
+                        },
+                        data: {
+                            Product: {
+                                disconnect: {
+                                    productID
+                                }
+                            }
+                        }
+                    });
+                }
                 await prisma.logs.create({
                     data: { log: "Pull-out request", createdAt: new Date(Date.now()), User: { connect: { userID } } }
                 });
@@ -413,6 +438,9 @@ export const requestMutation = extendType({
                         }
                     }
                 });
+                const prodc = await prisma.product.findUnique({
+                    where: { productID }
+                });
                 const request = await prisma.request.create({
                     data: {
                         User: {
@@ -432,7 +460,7 @@ export const requestMutation = extendType({
                                 notificationID: notif.notificationID
                             }
                         },
-                        message: "",
+                        message: `I'm requesting to restock my ${prodc.title} with ${stock} stock/s in my inventory.`,
                         createdAt: new Date(Date.now())
                     },
                 });
