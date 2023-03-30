@@ -91,7 +91,7 @@ async function startApolloServer() {
 
     app.use("/graphql",
         cors<cors.CorsRequest>({
-            origin: [ "http://localhost:3000", "https://studio.apollographql.com", "http://www.borahaecafe.shop" ],
+            origin: [ "http://localhost:3000", "https://studio.apollographql.com", "https://www.borahaecafe.shop", ],
             credentials: true,
         }),
         json(),
