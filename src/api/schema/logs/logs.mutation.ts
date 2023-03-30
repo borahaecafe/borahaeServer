@@ -23,5 +23,22 @@ export const logsMutation = extendType({
                 })
             }
         })
+        t.field("createLoginLog", {
+            type: "logs",
+            args: { userID: nonNull(idArg()) },
+            resolve: async (_, { userID }): Promise<any> => {
+                return await prisma.logs.create({
+                    data: {
+                        log: "Login",
+                        createdAt: new Date(Date.now()),
+                        User: {
+                            connect: {
+                                userID
+                            }
+                        }
+                    }
+                })
+            }
+        })
     },
 })

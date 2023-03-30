@@ -75,42 +75,6 @@ export const userMutation = extendType({
                     }
                 })
 
-                if (role === "administrator") {
-                    const user = await prisma.user.create({
-                        data: {
-                            email, password: pass, createdAt: new Date(Date.now()),
-                            Profile: {
-                                create: {
-                                    birthday,
-                                    firstname,
-                                    lastname,
-                                    phone
-                                },
-                            },
-                            Company: {
-                                connect: {
-                                    companyID: users.Company[ 0 ].companyID
-                                }
-                            },
-                            role: "administrator"
-                        }
-                    })
-
-                    await prisma.logs.create({
-                        data: {
-                            log: "New Created Administrator",
-                            User: {
-                                connect: {
-                                    userID: users.userID
-                                }
-                            },
-                            createdAt: new Date(Date.now())
-                        }
-                    })
-                    pubsub.publish("createUserSubscriptions", user)
-                    return user
-                }
-
                 if (role === "vendor") {
                     const user = await prisma.user.create({
                         data: {
@@ -171,19 +135,6 @@ export const userMutation = extendType({
                         algorithm: "HS512",
                         expiresIn: "7d",
                         
-                    })
-
-
-                    await prisma.logs.create({
-                        data: {
-                            createdAt: new Date(Date.now()),
-                            log: "Login",
-                            User: {
-                                connect: {
-                                    userID: user.userID
-                                }
-                            }
-                        }
                     })
 
 
