@@ -10,7 +10,7 @@
    "type": "module",
    "scripts": {
       "dev": "nodemon",
-      "start": "node dist/server.js",
+      "start": "node dist/src/server.js",
       "test": "jest",
       "build": "rimraf build && npx tsc",
       "postinstall": "npx prisma generate --schema=./src/prisma/schema.prisma"
