@@ -58,6 +58,7 @@ async function startApolloServer() {
         schema,
         csrfPrevention: true,
         cache: "bounded",
+        introspection: true,
         plugins: [
             ApolloServerPluginDrainHttpServer({ httpServer }),
             {
@@ -73,7 +74,7 @@ async function startApolloServer() {
     });
     await server.start();
     app.use("/graphql", cors({
-        origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+        origin: ["http://localhost:3000", "https://studio.apollographql.com", "https://www.borahaecafe.shop/", "https://www.borahaecafe.shop"],
         credentials: true,
     }), json(), expressMiddleware(server, {
         context: async ({ req, res }) => ({ req, res }),
