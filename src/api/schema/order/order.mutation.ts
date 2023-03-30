@@ -102,8 +102,23 @@ export const orderMutation = extendType({
             resolve: async (_, { orderID, status }): Promise<any> => {
                 const orders = await prisma.order.update({
                     where: { orderID },
-                    data: { status: status as any }
+                    data: { status: status as any },
+                    include: {
+                        Product: true
+                    }
                 })
+
+                if (orders.status === "refund") {
+                    const prodc = await prisma.product.findUnique({
+                        where: { productID: orders.Product[ 0 ].productID }
+                    })
+                    await prisma.product.update({
+                        data: { stock: prodc.stock + orders.quantity },
+                        where: {
+                            productID:  orders.Product[ 0 ].productID
+                        }
+                    })
+                }
 
                 await prisma.logs.create({
                     data: {

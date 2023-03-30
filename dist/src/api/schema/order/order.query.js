@@ -28,6 +28,9 @@ export const orderQuery = extendType({
                     where: {
                         createdAt: {
                             gte: new Date(start)
+                        },
+                        NOT: {
+                            status: "refund"
                         }
                     },
                     orderBy: {

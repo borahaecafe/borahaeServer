@@ -6,7 +6,7 @@ import { expressMiddleware } from "@apollo/server/express4";
 import { WebSocketServer } from 'ws';
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { join } from 'path';
-import { PrismaClient } from '@prisma/client/index.js';
+import { PrismaClient } from '@prisma/client';
 import { PubSub } from "graphql-subscriptions/dist/pubsub.js";
 import graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.mjs';
 import authorization from 'nexus';
@@ -51,7 +51,7 @@ async function startApolloServer() {
     });
     const wsServer = new WebSocketServer({
         server: httpServer,
-        path: '/graphql'
+        path: '/xd'
     });
     const serverCleanup = useServer({ schema }, wsServer);
     const server = new ApolloServer({

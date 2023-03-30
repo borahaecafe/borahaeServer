@@ -27,7 +27,7 @@ export const companyMutation = extendType({
                         createdAt: new Date(Date.now()),
                         User: {
                             connect: {
-                                userID: company.User[ 0 ].userID
+                                userID: company.User.userID
                             }
                         }
                     }
