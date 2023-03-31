@@ -19,7 +19,14 @@ export const companyQuery = extendType({
             resolve: async (_, { companyID }): Promise<any> => {
                 return await prisma.company.findMany({
                     where: {
-                        companyID
+                        companyID,
+                        order: {
+                            some: {
+                                NOT: {
+                                    status: "refund"
+                                }
+                            }
+                        }
                     }
                 })
             }
