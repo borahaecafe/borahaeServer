@@ -20,13 +20,6 @@ export const companyQuery = extendType({
                 return await prisma.company.findMany({
                     where: {
                         companyID,
-                        order: {
-                            some: {
-                                NOT: {
-                                    status: "refund"
-                                }
-                            }
-                        }
                     }
                 })
             }
