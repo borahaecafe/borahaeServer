@@ -205,7 +205,6 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createCompanyDetails: NexusGenRootTypes['company'] | null; // company
-    createLoginLog: NexusGenRootTypes['logs'] | null; // logs
     createLogoutLog: NexusGenRootTypes['logs'] | null; // logs
     createOTP: NexusGenRootTypes['otp'] | null; // otp
     createOrder: Array<NexusGenRootTypes['order'] | null> | null; // [order]
@@ -394,7 +393,6 @@ export interface NexusGenFieldTypes {
 export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createCompanyDetails: 'company'
-    createLoginLog: 'logs'
     createLogoutLog: 'logs'
     createOTP: 'otp'
     createOrder: 'order'
@@ -585,9 +583,6 @@ export interface NexusGenArgTypes {
     createCompanyDetails: { // args
       address?: NexusGenInputs['addressInput'] | null; // addressInput
       companyID: string; // ID!
-    }
-    createLoginLog: { // args
-      userID: string; // ID!
     }
     createLogoutLog: { // args
       userID: string; // ID!

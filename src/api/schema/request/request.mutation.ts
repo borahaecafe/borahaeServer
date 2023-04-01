@@ -444,22 +444,6 @@ export const requestMutation = extendType({
                     }
                 })
 
-                if (quantity === request.quantity) {
-                    return await prisma.company.update({
-                        where: {
-                            companyID: users[ 0 ].Company[ 0 ].companyID
-                        },
-                        data: {
-                            Product: {
-                                disconnect: {
-                                    productID
-                                }
-                            }
-                        }
-                    })
-
-                }
-
                 await prisma.logs.create({
                     data: { log: "Pull-out request", createdAt: new Date(Date.now()), User: { connect: { userID } } }
                 })
